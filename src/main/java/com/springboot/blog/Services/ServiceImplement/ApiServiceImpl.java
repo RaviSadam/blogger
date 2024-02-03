@@ -3,6 +3,7 @@ package com.springboot.blog.Services.ServiceImplement;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,15 @@ import com.springboot.blog.Repositories.CommentsRespository;
 import com.springboot.blog.Services.ApiService;
 import com.springboot.blog.Services.CompressionDecompression.CompressDecompress;
 
-import lombok.RequiredArgsConstructor;
-
 
 @Service
-@RequiredArgsConstructor
 public class ApiServiceImpl implements ApiService {
 
-    private final BlogRepository blogRepository;
-    private final CommentsRespository commentsRespository;
+    @Autowired
+    private  BlogRepository blogRepository;
+    
+    @Autowired
+    private  CommentsRespository commentsRespository;
 
 
     @Override
