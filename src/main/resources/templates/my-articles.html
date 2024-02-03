@@ -1,0 +1,151 @@
+
+
+
+
+
+
+<!--
+    isLoggedIn
+    List of articles----title
+                        id
+                        dueDate
+-->
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>My Articles</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .custom-border {
+            border: 2px solid #007bff;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            margin: 10px;
+        }
+
+        h1, h2, p {
+            color: #343a40;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+        
+        li:hover {
+            background-color: #d394de;
+        }
+        .list {
+            border-radius: 5px;
+            margin: 5px;
+            padding-left: 4px;
+        }
+        .list-item {
+            font-weight: 700;
+            font-size: 17px;
+            color: rgb(5, 5, 5) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#8be6dd">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item list">
+                        <a class="nav-link list-item" aria-current="/app/home" href="#">Home</a>
+                    </li>
+                    <!-- Display these items only if the user name is not null -->
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="/blog/pick-article">Pick Article</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="/blog/my-articles">My Articles</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="#">Logout</a>
+                    </li>
+                    <li class="nav-item list" th:unless="${isLoggedIn}">
+                        <a class="nav-link list-item" href="/logout">Login</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Article List</h2>
+        <hr>
+    
+        <div th:each="article : ${articles}">
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <p th:text="${article.title}" class="h4" style="display: inline-block;">Article Title</p>
+                    <span class="badge badge-pill" th:if="${article.status == 'DRAFT'}" th:classappend="'badge-danger'" th:text="${article.status}">Status</span>
+                    <span class="badge badge-pill" th:if="${article.status == 'PENDING_REVIEW'}" th:classappend="'badge-info'" th:text="${article.status}">Status</span>
+                    <span class="badge badge-pill" th:if="${article.status != 'DRAFT' and article.status != 'PENDING_REVIEW'}" th:classappend="'badge-warning'" th:text="${article.status}">Status</span>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-success" th:disabled="${article.status == 'PENDING_REVIEW'}" style="margin-top: 15px;" th:href="@{'/blog/write?blogId='+${article.id}+'&blogTitle='+${article.title}}">Write</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-muted" th:text="'Due Date: ' + ${article.dueDate}">Due Date</p>
+                </div>
+            </div>
+            <hr>
+        </div>
+    
+    </div>
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:class="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{/blog/my-articles?pageNumber=1}">First</a>
+        </li>
+        <li class="page-item" th:class="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{'/blog/my-articles/?pageNumber='+${currentPage-1}}">Previous</a>
+        </li>
+        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNumber} ? 'active'">
+            <a class="page-link" th:href="@{'blog/my-articles?pageNumber='+${pageNumber}}" th:text="${pageNumber + 1}"></a>
+        </li>
+        <li class="page-item" th:class="${currentPage == totalPages } ? 'disabled'">
+            <a class="page-link" th:href="@{'blog/my-articles?pageNumber='+${currentPage+1}}">Next</a>
+        </li>
+        <li class="page-item" th:class="${currentPage == totalPages } ? 'disabled'">
+            <a class="page-link" th:href="@{'blog/my-articles?pageNumber='+${totalPages}}">Last</a>
+        </li>
+    </ul>
+    <script src="https://cdn.tiny.cloud/1/2f3dhstx598mffk9ghmmrhhg2v7v2ixeqzj3f45vefqivh7q/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        
+    </script>
+
+</body>
+
+</html>

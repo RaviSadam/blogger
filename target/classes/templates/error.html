@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            color: #4d7aff;
+            font-size: 18px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .error-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #9a3ce7;
+            margin-bottom: 20px;
+        }
+        
+        .request-info {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .green-color {
+            color: #45a049;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .home-button {
+            background-color: #4caf50;
+        }
+        
+        .home-button:hover {
+            background-color: #45a049;
+        }
+        
+        .login-button {
+            background-color: #3498db;
+        }
+        
+        .login-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <link rel="icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: #f81b02;font-weight: bold;font-family:Georgia, 'Times New Roman', Times, serif">Error</h1>
+        <div class="error-code" th:text="${errorCode}">404</div>
+        <div class="error-message" th:text="${errorMessage}">Error</div>
+        <div class="request-info">
+            <div>Request Path:  <span class="green-color" th:text="${requestPath}">Ravi</span></div>
+            <div>Request Method:  <span class="green-color" th:text="${requestMethod}">Sadam</span></div>
+        </div>
+
+        <div class="button-container">
+            <a th:if="${isLoggedIn}" href="/blog/" class="home-button">Home</a>
+            <a th:unless="${isLoggedIn}" href="/app/login" class="login-button">Login</a>
+        </div>
+    </div>
+</body>
+</html>

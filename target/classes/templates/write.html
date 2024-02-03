@@ -1,0 +1,442 @@
+
+
+<!-- 
+    isLoggedIn
+    readOnly
+    blogTitle
+    blogId
+    List of comments ---content
+                        addedDate
+                        username
+    APIS
+       -/api/comments?username=usrname&blogId=blogIg
+ -->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Write Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+
+        #content {
+            margin: 20px;
+        }
+
+        #textAreaContainer {
+            margin-top: 20px;
+            border: 2px solid rgb(20, 25, 32);
+            border-radius: 10px;
+        }
+
+        .text {
+            resize: none;
+            height: 600px;
+            width: 100%;
+        }
+
+        #buttonsContainer {
+            margin-top: 20px;
+        }
+
+        .button {
+            margin-right: 10px;
+        }
+
+        #commentsSection {
+            margin-top: 20px;
+        }
+
+        #title {
+            width: 100%;
+            height: 50px;
+            padding: 5px;
+            margin: 3px;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: 700;
+            border: solid black 2px;
+        }
+
+        li:hover {
+            background-color: #d394de;
+        }
+
+        .list {
+            border-radius: 5px;
+            margin: 5px;
+            padding-left: 4px;
+        }
+
+        .list-item {
+            font-weight: 700;
+            font-size: 17px;
+            color: rgb(5, 5, 5) !important;
+        }
+
+        .error-message {
+            background-color: #ff6666;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .comments {
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+        }
+
+        #comment-area {
+            font-family: monospace;
+            margin: 5px 5px 5px 0px;
+            height: 150px;
+            width: 100%;
+            font-size: 20px;
+            padding: 10px;
+            padding-left: 15px;
+            resize: none;
+            overflow: auto;
+            outline: none;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .comment-button {
+            margin-bottom: 10px;
+            display: inline;
+        }
+
+        #coment-section {
+            margin: 5px 5px 15px 20px;
+        }
+
+        #comments-list {
+            border: 2px solid rgb(88, 210, 125);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        #comment-item {
+            border: 2px dotted red;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+        }
+        .dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: red;
+        }
+        input {
+            width: 95%;
+            padding: 8px;
+            margin-top: 5px;
+            outline: none;
+            box-sizing: border-box;
+            border:2px solid black;
+            border-radius: 5px;;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+        button[type="submit"], button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+        .copy-link-btn {
+            cursor: pointer;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-left: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .copy-link-btn:hover {
+            background-color: #0056b3;
+        }
+        #mytextArea{
+            cursor:text;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-message">
+        Auto Save not working. Please save article before closing tab🙂
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#8be6dd">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item list">
+                        <a class="nav-link list-item" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" th:href="@{'/blog/pick-article'}">Pick Article</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" th:href="@{'/blog/my-articles'}">My Articles</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="/logout">Logout</a>
+                    </li>
+                    <li class="nav-item list" th:unless="${isLoggedIn}">
+                        <a class="nav-link list-item" href="/login">Login</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="content">
+        <strong style="margin: 3px;">Post Title</strong>
+        <p id="title" th:text="${blogTitle}"></p>
+        <div id="textAreaContainer">
+            <textarea id="myTextarea" class="text" placeholder="Start here..." th:readonly="${readOnly}"></textarea>
+        </div>
+        <div id="buttonsContainer">
+            <button id="submit" onclick="submitForReview()" class="button btn btn-primary">Submit for review</button>
+            <button id="save" onclick="saveArticle()" class="button btn btn-success">Save</button>
+            <button id="discard" onclick="discardArticle()" class="button btn btn-danger">Discard</button>
+        </div>
+    </div>
+    <div id="coment-section">
+        <div>
+            <h2 class="comments">Add Comment</h2>
+            <textarea maxlength="250" id="comment-area" placeholder="comment here!"></textarea>
+            <button class="button btn btn-primary comment-button" onclick="addComment()">Add Comment</button>
+            <p style="float: right;"><strong id="charCnt"> Character Limit 0/250</strong></p>
+        </div>
+        <h2 class="comments">Comments</h2>
+        <div id="comments-list">
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="dialog" id="dialog">
+        <h2>Image Upload</h2>
+        <form>
+            <label for="image">Image Name*:</label>
+            <input type="text" id="image" name="image" maxlength="30" placeholder="custom name" required>
+            <label for="file">Choose Image*:</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
+            <button type="submit">Upload</button>
+        </form>
+        <button onclick="closeDialog()">Close</button>
+        <p style="color: red;">File Dimensions Should be below 900*900</p>
+        <p style="color: red;">File size should be less than 1MB</p>
+        <p style="color: red;">Image Name should be 30 Characters MAX</p>
+    </div>
+
+    <script src="https://cdn.tiny.cloud/1/2f3dhstx598mffk9ghmmrhhg2v7v2ixeqzj3f45vefqivh7q/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js" integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-css.min.js" integrity="sha512-mHqYW9rlMztkE8WFB6wIPNWOVtQO50GYBsBRMyA1CMk34zLJ6BrvVy3RVHoIIofugmnoNLGxkuePQ9VT2a3u8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script th:inline="javascript">
+        const blogId = /*[[${blogId}]]*/ 'xxxxxx';
+        const commentArea = document.getElementById("comment-area");
+        const charCnt = document.getElementById("charCnt");
+        notRedColor=true
+        document.getElementById('comment-area').addEventListener('keydown', commentCounter);
+
+        var notRedColor = false;
+        tinymce.init({
+            selector: '#myTextarea',
+            resize: false,
+            plugins: 'searchreplace autolink directionality visualblocks visualchars image link media  codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists  wordcount  help  charmap linkchecker emoticons codesample',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline | link image | alignleft aligncenter alignright alignjustify lineheight |  bullist numlist indent outdent | removeformat | codesample',
+            content_style:`
+                body {
+                    cursor:text;
+                }
+            `
+        });
+
+        function submitForReview() {
+            var title = document.getElementById("title").value;
+            var content = tinymce.get("myTextarea").getContent({format: 'text'});
+            var formData = new FormData();
+            formData.append("blogId", blogId);
+            formData.append("content", content);
+            fetch("/blog/review", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => {
+                    console.log("Post submitted successfully");
+                })
+                .catch(error => {
+                    console.error("Error submitting post:", error);
+                });
+        }
+
+        function discardArticle() {
+            fetch("/blog/discard?blogId="+blogId, {
+                    method: "GET",
+                    headers: {
+                        "Cache-Control": "no-cache"
+                    }
+                })
+                .then(response => {
+                    console.log("Discarded successfully");
+                })
+                .catch(error => {
+                    console.error("Error Occured:", error);
+                });
+        }
+
+        function saveArticle() {
+            var title = document.getElementById("title").value;
+            var content = tinymce.get("myTextarea").getContent();
+            var formData = new FormData();
+            formData.append("blogId", blogId);
+            formData.append("content", content);
+            fetch("/api/save", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => {
+                    alert("Post saved successfully");
+                })
+                .catch(error => {
+                    alert("Error while saving post:", error);
+                });
+        }
+
+        function commentCounter() {
+            var count = commentArea.value.length;
+            if (count >= 250) {
+                commentArea.style.border = "3px solid red";
+                commentArea.style.backgroundColor = "#ed7b7b"
+                notRedColor = true;
+            } else if (notRedColor) {
+                commentArea.style.border = "3px solid black";
+                commentArea.style.backgroundColor = "#fff"
+                notRedColor = false;
+            }
+            charCnt.innerText = 'Character Limit: ' + count + "/250";
+        }
+
+        function addComment() {
+            var content =  document.getElementById("comment-area").value;
+            var formData = new FormData();
+            formData.append("comment",content);
+            formData.append("blogId",blogId);
+            fetch('/api/comments', {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => {
+                    console.log("Post submitted successfully");
+                    return response;
+                })
+                .then(response=>{
+                    var commentsList = document.getElementById("comments-list");
+                    var newCommentItem = document.createElement("div");
+                    var currentDate = new Date();
+                    var year = currentDate.getFullYear();
+                    var month = currentDate.getMonth() + 1; // Month is zero-based, so we add 1
+                    var day = currentDate.getDate();
+                    newCommentItem.innerHTML = `
+                        <div id="comment-item">
+                            <strong>You</strong>
+                            <i>${day+"-"+month+"-"+year}</i>
+                            <br>
+                            <p>${content}</p>
+                        </div>`;
+                    commentsList.insertBefore(newCommentItem);
+                })
+                .catch(error => {
+                    console.error("Error submitting post:", error);
+                });
+                document.getElementById("comment-area").innerText=""
+        }
+        function openDialog() {
+            document.getElementById('dialog').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+    
+        function closeDialog() {
+            document.getElementById('dialog').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+        
+    </script>
+    <script>
+        $(document).ready(function() {
+            $.get("/api/comments/"+blogId, function(data) {
+                if (data.length === 0) {
+                    $("#comments-list").html("<p>No comments available.</p>");
+                } else {
+                    data.forEach(function(comment) {
+                        $("#comments-list").append(`<p>${comment.username}</p>`);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

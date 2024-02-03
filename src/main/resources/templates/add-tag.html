@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categerory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+    
+        h2 {
+            color: #333;
+        }
+    
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+    
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+    
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background-color: #45a049;
+        }
+    
+        .exists {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 20px;
+            background-color: #db8987;
+            border: 1px solid #d6e9c6;
+            border-radius: 5px;
+            color: #ede5e5;
+        }
+        .success{
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 20px;
+            background-color: #6dd05c;
+            border: 1px solid #d6e9c6;
+            border-radius: 5px;
+            color: #f4f5f5;
+        }
+    </style>
+    
+</head>
+<body>
+    <h2>Add Categerory</h2>
+
+    <form th:action="@{/blog/add-tag}" method="post">
+        <label for="inputText">Input Text:</label>
+        <input type="text" id="inputText" name="categeory" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div th:if="${exists}" th:text="${existsText}" class="exists">Categeory already exists</div>
+    <div th:if="${success}" th:text="${successText}" class="success">Categeory Added</div>
+</body>
+</html>

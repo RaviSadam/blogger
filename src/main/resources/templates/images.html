@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${username}+' Images'">Image Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px; /* Added margin-top for separation from the navbar */
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        div {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border-radius: 5px; /* Added border-radius for input elements */
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.copy-button {
+            background-color: #337ab7;
+            margin-left: 10px;
+        }
+
+        .alert {
+            background-color: #dff0d8;
+            border: 1px solid #3c763d;
+            color: #3c763d;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .image-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        li:hover {
+            background-color: #d394de;
+        }
+
+        .list {
+            border-radius: 5px;
+            margin: 5px;
+            padding-left: 4px;
+        }
+
+        .list-item {
+            font-weight: 700;
+            font-size: 17px;
+            color: rgb(5, 5, 5) !important;
+        }
+        .active{
+            color: red !important;
+        }
+
+        .error-message {
+            background-color: #ff6666;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#8be6dd">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item list">
+                        <a class="nav-link list-item" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="#">Pick Article</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="#">My Articles</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item active" href="#">Upload Image/Your Images Links</a>
+                    </li>
+                    <li class="nav-item list" th:if="${isLoggedIn}">
+                        <a class="nav-link list-item" href="#">Logout</a>
+                    </li>
+                    <li class="nav-item list" th:unless="${isLoggedIn}">
+                        <a class="nav-link list-item" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div>
+            <h2>Upload Image</h2>
+            <form id="uploadForm" th:action="@{/api/upload}" method="post" enctype="multipart/form-data">
+                <label for="imageName" style="color: red;">Image Name:</label>
+                <input type="text" id="imageName" name="imageName" style="border-radius: 10px; outline:none; font-size:15px; font-weight:bold;" maxlength="30" required/>
+                <br/>
+                <label for="imageFile" style="color: red;">Choose Image:</label>
+                <input type="file" id="imageFile" name="imageFile" accept="image/*" required/>
+                <br/>
+                <button type="button" id="uploadButton">Upload</button>
+            </form>
+            <div class="alert" id="uploadAlert" style="display: none;"></div>
+        </div>
+
+        <div>
+            <h2>Image List</h2>
+            <div th:each="image : ${images}" class="image-row">
+                <span th:text="${image.originalName}"></span>
+                <button class="copy-button" th:onclick="@{'copyFunction('+${image.imageId}+')'}">Copy</button>
+            </div>
+        </div>
+    </div>
+    
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:class="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{/blog/my-articles?pageNumber=1}">First</a>
+        </li>
+        <li class="page-item" th:class="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{'/blog/my-articles/?pageNumber='+${currentPage-1}}">Previous</a>
+        </li>
+        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:class="${currentPage == pageNumber} ? 'active'">
+            <a class="page-link" th:href="@{'blog/my-articles?pageNumber='+${pageNumber}}" th:text="${pageNumber + 1}"></a>
+        </li>
+        <li class="page-item" th:class="${currentPage == totalPages } ? 'disabled'">
+            <a class="page-link" th:href="@{'blog/my-articles?pageNumber='+${currentPage+1}}">Next</a>
+        </li>
+        <li class="page-item" th:class="${currentPage == totalPages } ? 'disabled'">
+            <a class="page-link" th:href="@{'blog/my-articles?pageNumber='+${totalPages}}">Last</a>
+        </li>
+    </ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/2f3dhstx598mffk9ghmmrhhg2v7v2ixeqzj3f45vefqivh7q/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script>
+        // Function to send FormData using fetch
+        function uploadFormData(formData) {
+            fetch('your_upload_endpoint', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle response data
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+
+        // Event listener for form submission
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const imageName = document.getElementById('imageName').value;
+            const imageFile = document.getElementById('imageFile').files[0];
+            const formData = new FormData();
+            formData.append('imageName', imageName);
+            formData.append('imageFile', imageFile);
+            uploadFormData(formData);
+        });
+
+        function copyFunction(imageId){
+            navigator.clipboard.writeText("")
+        }
+
+    </script>
+</body>
+</html>
