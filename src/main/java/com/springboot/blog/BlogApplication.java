@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-// ravi123
-// ravi@123 -- ADMIN, USER
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,6 +34,7 @@ import jakarta.annotation.PostConstruct;
 @EnableWebMvc
 @EnableMethodSecurity
 @EnableCaching
+@EnableJpaRepositories(basePackages="com.springboot.blog.Repositories")
 public class BlogApplication {
 
 
