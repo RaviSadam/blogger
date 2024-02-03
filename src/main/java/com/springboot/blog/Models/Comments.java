@@ -2,9 +2,6 @@ package com.springboot.blog.Models;
 
 import java.util.Date;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,23 +16,26 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="comments")
-@DynamicInsert
-@DynamicUpdate
 @Builder
+@Getter
+@Setter
+@ToString
 public class Comments {
     @Id
-    
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
+    @Column(unique = true)
     private long id;
 
     @Column(length = 200)
