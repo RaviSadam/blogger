@@ -1,6 +1,5 @@
 
 
-
 INSERT INTO users (createddate,email,firstname,gender,lastname,password,username) VALUES(CURRENT_DATE(),'ravi@abc.com','Ravi','MALE','Sadam','$2a$12$WewTghpISWht3OrxfLLdrOEDSCkEps.AuypXUnGGd85Xv1eP8r7su','ravi123');
 INSERT INTO users (createddate,email,firstname,gender,lastname,password,username) VALUES(CURRENT_DATE(),'rama@abc.com','Rama','MALE','Sadam','$2a$12$txjMdEGeeaeBahZKhzqR9eRHlmS411NRC8dxxBNe2da7szVH4.hMG','rama123');
 
