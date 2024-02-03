@@ -1,5 +1,6 @@
 # Blogging
-he blog application I developed is a comprehensive platform aimed at providing users with a seamless blogging experience. Leveraging various technologies and frameworks, including Thymeleaf, Spring Security, H2 Database, Lombok, Spring Web, Spring Data JPA, Spring Boot Validation, and Spring Boot DevTools, the application offers a robust set of features.
+
+The blog application I developed is a comprehensive platform aimed at providing users with a seamless blogging experience. Leveraging various technologies and frameworks, including Thymeleaf, Spring Security, H2 Database, Lombok, Spring Web, Spring Data JPA, Spring Boot Validation, and Spring Boot DevTools, the application offers a robust set of features.
 
 Users can register and login securely to access the available articles. The platform allows users to browse through the collection of articles and pick one to start writing their own content. Once a user picks an article, it is displayed in the "My Picked Articles" page, exclusively for draft articles. Users can then utilize a third-party text editor integrated into the application for an enhanced writing experience.
 
