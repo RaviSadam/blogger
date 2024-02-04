@@ -14,6 +14,4 @@ In addition to the aforementioned features, the blog application incorporates Sp
 
 End Points
 
-![Screenshot 2024-02-04 011519](https://github.com/RaviSadam/blogging/assets/108484600/a2eddf9f-56ae-43e2-bcf0-5042daceaa38) ![Screenshot 2024-02-04 011518](https://github.com/RaviSadam/blogging/assets/108484600/dcea08a8-ba11-4fab-897e-5b7922b97fc6)
-
-
+![Screenshot 2024-02-04 011519](https://github.com/RaviSadam/blogger/assets/108484600/1ca2ae31-f3a9-4d09-97f7-678e62e508f8)  ![Screenshot 2024-02-04 011518](https://github.com/RaviSadam/blogger/assets/108484600/b55d9e3e-69db-4ed2-8688-a7fa5b68cdcb)
