@@ -114,7 +114,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item list">
-                        <a class="nav-link list-item" aria-current="/app/home" href="#">Home</a>
+                        <a class="nav-link list-item" href="/app/home">Home</a>
                     </li>
                     <!-- Display these items only if the user name is not null -->
                     <li class="nav-item list" th:if="${isLoggedIn}">
@@ -124,10 +124,10 @@
                         <a class="nav-link list-item" href="/blog/my-articles">My Articles</a>
                     </li>
                     <li class="nav-item list" th:if="${isLoggedIn}">
-                        <a class="nav-link list-item" href="#">Logout</a>
+                        <a class="nav-link list-item" href="/logout">Logout</a>
                     </li>
                     <li class="nav-item list" th:unless="${isLoggedIn}">
-                        <a class="nav-link list-item" href="/logout">Login</a>
+                        <a class="nav-link list-item" href="login">Login</a>
                     </li>
 
                 </ul>

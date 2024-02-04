@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.springboot.blog.BlogApplication;
 import com.springboot.blog.Dto.BlogData;
 import com.springboot.blog.Dto.CommentDto;
 import com.springboot.blog.Repositories.BlogRepository;
-import com.springboot.blog.Repositories.CommentsRespository;
 import com.springboot.blog.Services.ApiService;
 import com.springboot.blog.Services.CompressionDecompression.CompressDecompress;
 
