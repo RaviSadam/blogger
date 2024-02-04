@@ -38,7 +38,6 @@ import jakarta.annotation.PostConstruct;
 @EnableJpaRepositories(basePackages="com.springboot.blog.Repositories")
 public class BlogApplication {
 
-
 	//todays date;
 	public static Date todaysDate;
 

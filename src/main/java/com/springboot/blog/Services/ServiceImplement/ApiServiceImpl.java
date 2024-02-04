@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,9 @@ public class ApiServiceImpl implements ApiService {
     @Autowired
     private  BlogRepository blogRepository;
     
-    @Autowired
-    private  CommentsRespository commentsRespository;
+    // @Autowired
+    // @Lazy
+    // private  CommentsRespository commentsRespository;
 
 
     @Override
@@ -41,13 +43,14 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public boolean addComment(CommentDto commentDto,String username){
-        commentsRespository.addComment(commentDto.getComment(), BlogApplication.todaysDate,commentDto.getBlogId(),username);
+        // commentsRespository.addComment(commentDto.getComment(), BlogApplication.todaysDate,commentDto.getBlogId(),username);
         return true;
     }
 
     @Override
     public List<CommentDto> getComments(String blogId){
-        return commentsRespository.getComments(blogId);
+        // commentsRespository.getComments(blogId);
+        return null;
     }
     
 }
