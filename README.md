@@ -1,4 +1,5 @@
 # Blogging
+https://blogger-8f9i.onrender.com
 
 The blog application I developed is a comprehensive platform aimed at providing users with a seamless blogging experience. Leveraging various technologies and frameworks, including Thymeleaf, Spring Security, H2 Database, Lombok, Spring Web, Spring Data JPA, Spring Boot Validation, and Spring Boot DevTools, the application offers a robust set of features.
 
@@ -11,6 +12,10 @@ Admin privileges enable the addition of new blog titles and categories to the po
 Scheduled tasks are integrated into the system to automate processes such as garbage collection, executed every 10 minutes to optimize memory usage and ensure smooth application performance. In addition to the aforementioned features, the blog application incorporates Spring Boot Actuator to monitor and assess its performance. Spring Boot Actuator is a powerful tool that provides various endpoints to gather essential information about the application's runtime behavior and health.
 
 In addition to the aforementioned features, the blog application incorporates Spring Boot Actuator to monitor and assess its performance. Spring Boot Actuator is a powerful tool that provides various endpoints to gather essential information about the application's runtime behavior and health.
+
+Demo: https://blogger-8f9i.onrender.com
+Login url: https://blogger-8f9i.onrender.com/login
+**Front end not integrated properly**
 
 End Points
 
