@@ -21,7 +21,7 @@ public class PeriodTasksService {
     private BlogRepository blogRepository;
     
     //calling GC for every 2 mins
-	@Scheduled(fixedRate = 300000,initialDelay = 60000)
+	@Scheduled(fixedRate = 300000,initialDelay = 600000)
     public void gerbageCollection(){
 		System.gc();
         log.info("GC executed");
@@ -33,6 +33,4 @@ public class PeriodTasksService {
         BlogApplication.todaysDate=new Date(System.currentTimeMillis());
         blogRepository.updateStatus();        
     }
-
-
 }
